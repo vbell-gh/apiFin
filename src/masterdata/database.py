@@ -1,13 +1,16 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from config import Settings
 import os
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-company_name = "CompanyX"
+settings = Settings()
 
-db_folder = os.path.join(current_dir, "..", ".." ,".." ,"database")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+company_name = settings.company_name
+
+db_folder = os.path.join(current_dir, "..", "..", settings.database_location)
+print(db_folder)
 
 SQL_DB_URL = f"sqlite:///{db_folder}/{company_name}.db"
 engine = create_engine(

@@ -1,10 +1,12 @@
-from sqlalchemy import Boolean, Column, ForeignKey, String, BLOB, DATE, Integer
+from sqlalchemy import Boolean, Column, ForeignKey, String, Integer
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from typing import List, Optional
+from sqlalchemy.ext.declarative import declarative_base
+
+from typing import Optional
 from datetime import datetime
 
-from ..database import Base, engine
 
+Base = declarative_base()
 
 class CounterpartiesMain(Base):
     __tablename__ = 'counterparties_main'
@@ -44,11 +46,11 @@ class CounterpartiesAttribs(Base):
     fin_contact_email: Mapped[Optional[str]]
     fin_contact_phone: Mapped[Optional[str]]
     upload_one_name: Mapped[Optional[str]]
-    upload_one_file: Mapped[Optional[BLOB]]
+    upload_one_file: Mapped[Optional[str]] # file path should be here, not the file itself
     upload_two_name: Mapped[Optional[str]]
-    upload_two_file: Mapped[Optional[BLOB]]
+    upload_two_file: Mapped[Optional[str]]
     upload_three_name: Mapped[Optional[str]]
-    upload_three_file: Mapped[Optional[BLOB]]
+    upload_three_file: Mapped[Optional[str]]
     # creator_id: Mapped['User'] = mapped_column(ForeignKey='users.id') # add User class
 
     c_main: Mapped['CounterpartiesMain'] = relationship(

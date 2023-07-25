@@ -2,9 +2,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from ..schemas import c_parties
-
-from .. import database
-
 from ..models import c_parties
 
 
