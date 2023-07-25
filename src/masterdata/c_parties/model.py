@@ -21,9 +21,6 @@ class CounterpartiesMain(Base):
 
     attributes: Mapped['CounterpartiesAttribs'] = relationship(
         back_populates='counterparties_main')
-    additional_data: Mapped['CounterpartiesAdditionalData'] = relationship(
-        back_populates='counterparties_main')
-
 
 class CounterpartiesAttribs(Base):
     __tablename__ = 'counterparties_attribs'
@@ -40,18 +37,6 @@ class CounterpartiesAttribs(Base):
     is_active = Column(Boolean, nullable=False)
     date_deactivaion: Mapped[Optional[datetime]]
     date_created: Mapped[datetime]
-    # creator_id: Mapped['User'] = mapped_column(ForeignKey='users.id') # add User class
-
-    c_main: Mapped['CounterpartiesMain'] = relationship(
-        back_populates='counterparties_attribs')
-
-
-class CounterpartiesAdditionalData(Base):
-    __tablename__ = 'counterparties_additional_data'
-
-    id: Mapped[CounterpartiesMain] = mapped_column(
-        ForeignKey('counterparties_main.id'),
-        primary_key=True)
     main_contact_name: Mapped[Optional[str]]
     main_contact_email: Mapped[Optional[str]]
     main_contact_phone: Mapped[Optional[str]]
@@ -64,7 +49,8 @@ class CounterpartiesAdditionalData(Base):
     upload_two_file: Mapped[Optional[bool]]
     upload_three_name: Mapped[Optional[str]]
     upload_three_file: Mapped[Optional[bool]]
+    # creator_id: Mapped['User'] = mapped_column(ForeignKey='users.id') # add User class
 
     c_main: Mapped['CounterpartiesMain'] = relationship(
-        back_populates='counterparties_additional_data')
+        back_populates='counterparties_attribs')
 

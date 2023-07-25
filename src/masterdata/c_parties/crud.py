@@ -35,9 +35,7 @@ def create_c_party(db: Session, c_party: schemas.CounterpartiesBase):
         client_due_days=c_party.client_due_days, is_vendor=c_party.is_vendor,
         vendor_is_due=c_party.vendor_is_due, vendor_due_days=c_party.vendor_due_days,
         is_active=c_party.is_active, date_created=c_party.date_created,
-        date_deactivaion=c_party.date_deactivaion)
-    c_party_additional = model.CounterpartiesAdditionalData(
-        # we need to add the c_id, ORM!
+        date_deactivaion=c_party.date_deactivaion,
         main_contact_name=c_party.main_contact_name, main_contact_email=c_party.main_contact_email,
         main_contact_phone=c_party.main_contact_phone, fin_contact_name=c_party.fin_contact_name,
         fin_contact_email=c_party.fin_contact_email, fin_contact_phone=c_party.fin_contact_phone,
@@ -45,5 +43,5 @@ def create_c_party(db: Session, c_party: schemas.CounterpartiesBase):
         upload_two_name=c_party.upload_two_name, upload_two_file=c_party.upload_two_file,
         upload_three_name=c_party.upload_three_name, upload_three_file=c_party.upload_three_file,
     )
-    db.add_all([c_party_main, c_party_atribs, c_party_additional])
+    db.add_all([c_party_main, c_party_atribs])
     db.commit()
