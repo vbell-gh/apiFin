@@ -1,2 +1,4 @@
 *.db
 /database
+__pycache__
+.vscode
