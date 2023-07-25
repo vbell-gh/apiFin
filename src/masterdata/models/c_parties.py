@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List, Optional
 from datetime import datetime
 
-from .database import Base, engine
+from ..database import Base, engine
 
 
 class CounterpartiesMain(Base):
@@ -44,11 +44,11 @@ class CounterpartiesAttribs(Base):
     fin_contact_email: Mapped[Optional[str]]
     fin_contact_phone: Mapped[Optional[str]]
     upload_one_name: Mapped[Optional[str]]
-    upload_one_file: Mapped[Optional[bool]]
+    upload_one_file: Mapped[Optional[BLOB]]
     upload_two_name: Mapped[Optional[str]]
-    upload_two_file: Mapped[Optional[bool]]
+    upload_two_file: Mapped[Optional[BLOB]]
     upload_three_name: Mapped[Optional[str]]
-    upload_three_file: Mapped[Optional[bool]]
+    upload_three_file: Mapped[Optional[BLOB]]
     # creator_id: Mapped['User'] = mapped_column(ForeignKey='users.id') # add User class
 
     c_main: Mapped['CounterpartiesMain'] = relationship(
