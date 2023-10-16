@@ -1,46 +1,29 @@
-from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlmodel import Session, create_engine, select
 
-from ..schemas import c_parties
-from ..models import c_parties
+from ..models.c_parties import CounterPartiesMain, CounterpartiesAttribs
+COMPANY_NAME = "CompanyX"
+SQL_LOCATION = f"sqlite:///{COMPANY_NAME}.db"
 
+def insert_cparty(engine, c_party_main: CounterPartiesMain, c_party_atribs: CounterpartiesAttribs):
+    with Session(engine) as session:
+        try:
+            session.add(c_party_main)
+            session.add(c_party_atribs)
+            session.commit()
+            # log here if error or return
+        except Exception as e:
+            return e
+            #log here if error or return
 
-def get_c_parties(db: Session, skip: int = 0, limit: int = 0):
-    data = db.query(c_parties.CounterpartiesMain).offset(skip).limit(limit).all()
-    return data
+def get_cparties(engine):
+    with Session(engine) as session:
+        statement = select(CounterPartiesMain)
+        results = session.exec(statement)
+        for party in results:
+            print(party)
 
-
-def get_c_party(db: Session, company_id: int):
-    statement = (
-        select(c_parties.CounterpartiesMain)
-        .join(c_parties.CounterpartiesMain.attributes)
-        .join(c_parties.CounterpartiesMain.additional_data)
-        .where(c_parties.CounterpartiesMain.company_id == company_id)
-    )
-    data = db.query(statement).first()
-    return data
-
-
-def create_c_party(db: Session, c_party: c_parties.CounterpartiesBase):
-    c_party_main = c_parties.CounterpartiesMain(
-        vatid=c_party.vatid,
-        country=c_party.country, company_id=c_party.company_id,
-        bank_account=c_party.bank_account, company_name_cyrilic=c_party.company_name_cyrilic,
-        company_name_latin=c_party.company_name_latin, address=c_party.address
-    )
-    c_party_atribs = c_parties.CounterpartiesAttribs(
-        # we need to add the c_id, ORM!
-        is_client=c_party.is_client, client_is_due=c_party.client_is_due,
-        client_due_days=c_party.client_due_days, is_vendor=c_party.is_vendor,
-        vendor_is_due=c_party.vendor_is_due, vendor_due_days=c_party.vendor_due_days,
-        is_active=c_party.is_active, date_created=c_party.date_created,
-        date_deactivaion=c_party.date_deactivaion,
-        main_contact_name=c_party.main_contact_name, main_contact_email=c_party.main_contact_email,
-        main_contact_phone=c_party.main_contact_phone, fin_contact_name=c_party.fin_contact_name,
-        fin_contact_email=c_party.fin_contact_email, fin_contact_phone=c_party.fin_contact_phone,
-        upload_one_name=c_party.upload_one_name, upload_one_file=c_party.upload_one_file,
-        upload_two_name=c_party.upload_two_name, upload_two_file=c_party.upload_two_file,
-        upload_three_name=c_party.upload_three_name, upload_three_file=c_party.upload_three_file,
-    )
-    db.add_all([c_party_main, c_party_atribs])
-    db.commit()
+def get_cparty(engine, id:int):
+    with Session(engine) as session:
+        statement = select(CounterPartiesMain).join(CounterpartiesAttribs).where(CounterPartiesMain.id == id)
+        result = session.exec(statement)
+        print(result)
