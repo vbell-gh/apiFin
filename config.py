@@ -1,4 +1,4 @@
-class Settings:
+class ApiDefault:
     def __init__(self) -> None:
         self.development = True
         self.database_is_sqllite = True

@@ -36,7 +36,7 @@ class CounterpartiesAttribs(SQLModel, table=True):
     upload_two_file: Optional[str]
     upload_three_name: Optional[str]
     upload_three_file: Optional[str]
-    creator_id: Optional[str] = Field(default=None, foreign_key="users.id")
+    # creator_id: Optional[str] = Field(default=None, foreign_key="users.id")
 
 def create_db_tables(engine):
     SQLModel.metadata.create_all(engine)
