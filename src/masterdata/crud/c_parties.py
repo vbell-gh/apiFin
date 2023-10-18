@@ -11,7 +11,11 @@ def insert_cparty(engine, c_party_main: CounterPartiesMain, c_party_atribs: Coun
             session.commit()
             return c_party_main
             # log here if error or return
+        except UniqueViolationError as e:
+            session.rollback()
+            return e
         except Exception as e:
+            print(e)
             return e
             #log here if error or return
 
@@ -19,8 +23,8 @@ def get_cparties(engine):
     with Session(engine) as session:
         statement = select(CounterPartiesMain)
         results = session.exec(statement)
-        for party in results:
-            return party
+        return list(results
+                    )
 
 def get_cparty(engine, id:int):
     with Session(engine) as session:
