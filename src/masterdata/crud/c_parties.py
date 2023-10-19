@@ -6,7 +6,7 @@ from src.masterdata.models.c_parties import CounterPartiesMain, CounterpartiesAt
 def insert_cparty(engine, c_party_main: CounterPartiesMain, c_party_atribs: CounterpartiesAttribs):
     with Session(engine) as session:
         try:
-            
+
             main_cparty = c_party_main
             session.add(main_cparty)
             session.commit()
@@ -21,7 +21,8 @@ def insert_cparty(engine, c_party_main: CounterPartiesMain, c_party_atribs: Coun
         except Exception as e:
             print(e)
             return e
-            #log here if error or return
+            # log here if error or return
+
 
 def get_cparties(engine):
     with Session(engine) as session:
@@ -30,9 +31,12 @@ def get_cparties(engine):
         return list(results
                     )
 
-def get_cparty(engine, id:int):
+
+def get_cparty(engine, id: int):
     with Session(engine) as session:
-        statement = select(CounterPartiesMain, CounterpartiesAttribs).where(CounterPartiesMain.id == id)
-        statement = statement.join(CounterpartiesAttribs, CounterPartiesMain.id == CounterpartiesAttribs.c_id)
+        statement = select(CounterPartiesMain, CounterpartiesAttribs).where(
+            CounterPartiesMain.id == id)
+        statement = statement.join(
+            CounterpartiesAttribs, CounterPartiesMain.id == CounterpartiesAttribs.c_id)
         result = session.exec(statement).first()
         return result
