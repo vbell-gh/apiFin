@@ -2,9 +2,10 @@ from fastapi import APIRouter
 from sqlmodel import SQLModel, create_engine
 
 from src.masterdata.crud.c_parties import insert_cparty, get_cparties, get_cparty
-from src.masterdata.crud.users import create_user, read_users, delete_user, add_role, read_roles
+# , add_role, read_roles
+from src.masterdata.crud.users import create_user, read_users, delete_user
 from src.masterdata.models.c_parties import CounterPartiesMain, CounterpartiesAttribs
-from src.masterdata.models.users import User, Roles
+from src.masterdata.models.users import User  # , Roles
 
 from config import ApiDefault
 
@@ -37,7 +38,7 @@ def read_cparty(id: int):
     return party
 
 
-@router.post("user/")
+@router.post("/user/")
 def add_user(user: User):
     user = create_user(engine, user)
     return user
