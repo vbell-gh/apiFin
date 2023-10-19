@@ -17,8 +17,8 @@ def create_tables():
 
 @router.post("/c_party/")
 def create_cparty(main: CounterPartiesMain, atribs: CounterpartiesAttribs):
-    party = insert_cparty(engine, c_party_main=main, c_party_atribs=atribs)
-    return party
+    c_party = insert_cparty(engine, c_party_main=main, c_party_atribs=atribs)
+    return c_party
 
 @router.get("/c_parties/")
 def read_cparties():

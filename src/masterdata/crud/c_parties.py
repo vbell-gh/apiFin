@@ -1,19 +1,23 @@
 from sqlmodel import Session, select
 
-from ..models.c_parties import CounterPartiesMain, CounterpartiesAttribs
+from src.masterdata.models.c_parties import CounterPartiesMain, CounterpartiesAttribs
 
 
 def insert_cparty(engine, c_party_main: CounterPartiesMain, c_party_atribs: CounterpartiesAttribs):
     with Session(engine) as session:
         try:
-            session.add(c_party_main)
-            session.add(c_party_atribs)
+            
+            main_cparty = c_party_main
+            session.add(main_cparty)
             session.commit()
+            session.refresh(main_cparty)
+            atribs_cparty = c_party_atribs
+            atribs_cparty.c_id = main_cparty.id
+            session.add(atribs_cparty)
+            session.commit()
+            session.refresh(atribs_cparty)
             return c_party_main
             # log here if error or return
-        except UniqueViolationError as e:
-            session.rollback()
-            return e
         except Exception as e:
             print(e)
             return e
@@ -28,6 +32,7 @@ def get_cparties(engine):
 
 def get_cparty(engine, id:int):
     with Session(engine) as session:
-        statement = select(CounterPartiesMain).join(CounterpartiesAttribs).where(CounterPartiesMain.id == id)
-        result = session.exec(statement)
+        statement = select(CounterPartiesMain, CounterpartiesAttribs).where(CounterPartiesMain.id == id)
+        statement = statement.join(CounterpartiesAttribs, CounterPartiesMain.id == CounterpartiesAttribs.c_id)
+        result = session.exec(statement).first()
         return result

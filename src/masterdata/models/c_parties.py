@@ -1,7 +1,8 @@
 
-from sqlmodel import Field, SQLModel, Relationship
+from sqlmodel import Field, SQLModel
 from typing import Optional
 from datetime import datetime
+import uuid
 
 class CounterPartiesMain(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -14,7 +15,8 @@ class CounterPartiesMain(SQLModel, table=True):
     address: str
 
 class CounterpartiesAttribs(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True, foreign_key="counterpartiesmain.id")
+    id: Optional[int] = Field(default=None, primary_key=True)
+    c_id: int = Field(foreign_key="counterpartiesmain.id")
     is_client: bool
     client_is_due: bool
     client_due_days: Optional[int]
@@ -22,7 +24,7 @@ class CounterpartiesAttribs(SQLModel, table=True):
     vendor_is_due: bool
     vendor_due_days: Optional[int]
     is_active: Optional[bool]
-    date_deactivaion: Optional[datetime]
+    date_deactivation: Optional[datetime]
     date_created: datetime
     main_contact_name: Optional[str]
     main_contact_email: Optional[str]
