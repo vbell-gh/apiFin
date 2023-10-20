@@ -1,10 +1,10 @@
 from sqlmodel import Session, select
 from sqlalchemy.orm.exc import NoResultFound
 
-from src.masterdata.models.users import User, Roles
+from src.masterdata.models.users import Users, Roles
 
 
-def create_user(engine, user: User):
+def create_user(engine, user: Users):
     with Session(engine) as session:
         try:
             user_data = user
@@ -18,7 +18,7 @@ def create_user(engine, user: User):
 
 def read_users(engine):
     with Session(engine) as session:
-        statement = select(User)
+        statement = select(Users)
         results = session.exec(statement)
         return results.all()
 
@@ -26,7 +26,7 @@ def read_users(engine):
 def delete_user(engine, user_id: int):
     with Session(engine) as session:
         try:
-            statement = select(User).where(User.id == user_id)
+            statement = select(Users).where(Users.id == user_id)
             results = session.exec(statement)
             user = results.one()
             session.delete(user)
