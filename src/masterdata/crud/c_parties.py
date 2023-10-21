@@ -37,10 +37,10 @@ def get_cparties(engine):
         return e
 
 
-def get_cparty(engine, id: int):
+def get_cparty(engine, c_party_id: int):
     with Session(engine) as session:
         statement = select(CounterPartiesMain, CounterpartiesAttribs).where(
-            CounterPartiesMain.id == id)
+            CounterPartiesMain.id == c_party_id)
         statement = statement.join(
             CounterpartiesAttribs, CounterPartiesMain.id == CounterpartiesAttribs.c_id)
         result = session.exec(statement).first()
