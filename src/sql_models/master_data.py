@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 
 
 class User(Base):
-    __table__ = "users"
+    __tablename__ = "users"
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str]
     password: Mapped[str]
@@ -25,7 +25,7 @@ class User(Base):
 
 
 class Role(Base):
-    __table__ = "roles"
+    __tablename__ = "roles"
     id: Mapped[int] = mapped_column(primary_key=True)
     role_name: Mapped[str]
     description: Mapped[Optional[str]]
@@ -34,9 +34,9 @@ class Role(Base):
         return f"Role id: {self.id!r} role_name: {self.role_name!r}"
 
 
-class VendordsMasterData(Base):
-    __table__ = "vendors_md"
-    id: Optional[int] = mapped_column(primary_key=True)
+class VendorsMasterData(Base):
+    __tablename__ = "vendors_md"
+    id: Mapped[int] = mapped_column(primary_key=True)
     vatid: Mapped[str]
     country: Mapped[str]
     company_id: Mapped[str]
@@ -50,8 +50,8 @@ class VendordsMasterData(Base):
 
 
 class ClientsMasterData(Base):
-    __table__ = "clients_md"
-    id: Optional[int] = mapped_column(primary_key=True)
+    __tablename__ = "clients_md"
+    id: Mapped[int] = mapped_column(primary_key=True)
     vatid: Mapped[str]
     country: Mapped[str]
     company_id: Mapped[str]
@@ -65,7 +65,7 @@ class ClientsMasterData(Base):
 
 
 class ClientsMDAtribs(Base):
-    __table__ = "clients_md_attribs"
+    __tablename__ = "clients_md_attribs"
     id: Mapped[int] = mapped_column(primary_key=True)
     c_id: Mapped[int] = mapped_column(ForeignKey("clients_md.id"))
     client_is_due: Mapped[bool]
@@ -86,7 +86,7 @@ class ClientsMDAtribs(Base):
 
 
 class VendorMDAtribs(Base):
-    __table__ = "vendor_md_attribs"
+    __tablename__ = "vendor_md_attribs"
     id: Mapped[int] = mapped_column(primary_key=True)
     c_id: Mapped[int] = mapped_column(ForeignKey("vendors_md.id"))
     vendor_is_due: Mapped[bool]
@@ -107,8 +107,8 @@ class VendorMDAtribs(Base):
 
 
 class GLAccountsMD(Base):
-    __table__ = "gl_accounts_md"
-    id: Optional[int] = mapped_column(primary_key=True)
+    __tablename__ = "gl_accounts_md"
+    id: Mapped[int] = mapped_column(primary_key=True)
     code: Mapped[int]
     name: Mapped[str]
     type: Mapped[str]
@@ -122,7 +122,7 @@ class GLAccountsMD(Base):
 
 
 class IvenotriesMD(Base):
-    __table__ = "invenotries_md"
+    __tablename__ = "invenotries_md"
     id: Mapped[int] = mapped_column(primary_key=True)
     material_code: Mapped[str]
     name: Mapped[str]
@@ -132,8 +132,7 @@ class IvenotriesMD(Base):
     unit_of_measure: Mapped[Optional[str]]
     barcode: Mapped[Optional[str]]
     is_active: Mapped[Optional[bool]]
-    vendor_code: Mapped[Optional[int]] = mapped_column(
-        foreign_key="vendors_md.id")
+    vendor_code: Mapped[Optional[int]] = mapped_column(ForeignKey("vendors_md.id"))
     date_created: Mapped[datetime]
 
     def __repr__(self) -> str:
@@ -141,8 +140,9 @@ class IvenotriesMD(Base):
 
 
 class InvenotriesAtributes(Base):
+    __tablename__ = "invenotries_md_attribs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    i_id: Mapped[int] = mapped_column(foreign_key="invenotries_md.id")
+    i_id: Mapped[int] = mapped_column(ForeignKey("invenotries_md.id"))
     customs_code: Mapped[Optional[int]]
     customs_description: Mapped[Optional[str]]
     main_unit: Mapped[Optional[str]]
