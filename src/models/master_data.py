@@ -34,6 +34,59 @@ class Role(Base):
         return f"Role id: {self.id!r} role_name: {self.role_name!r}"
 
 
+class GLAccountsMD(Base):
+    __tablename__ = "gl_accounts_md"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[int]
+    name: Mapped[str]
+    type: Mapped[str]
+    category: Mapped[Optional[str]]
+    subcategory: Mapped[Optional[str]]
+    description: Mapped[Optional[str]]
+    status: Mapped[str]
+
+    def __repr__(self) -> str:
+        return f"GLAccount id: {self.id!r} code: {self.code!r} name: {self.name!r}"
+
+
+class IvenotriesMD(Base):
+    __tablename__ = "invenotries_md"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    material_code: Mapped[str]
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
+    category: Mapped[Optional[str]]
+    sub_category: Mapped[Optional[str]]
+    unit_of_measure: Mapped[Optional[str]]
+    barcode: Mapped[Optional[str]]
+    is_active: Mapped[Optional[bool]]
+    vendor_code: Mapped[Optional[int]] = mapped_column(ForeignKey("vendors_md.id"))
+    date_created: Mapped[datetime]
+
+    def __repr__(self) -> str:
+        return f"Inventory id: {self.id!r} name: {self.name!r}"
+
+
+class InvenotriesAtributes(Base):
+    __tablename__ = "invenotries_md_attribs"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    i_id: Mapped[int] = mapped_column(ForeignKey("invenotries_md.id"))
+    customs_code: Mapped[Optional[int]]
+    customs_description: Mapped[Optional[str]]
+    main_unit: Mapped[Optional[str]]
+    net_weight: Mapped[Optional[float]]
+    gross_weight: Mapped[Optional[float]]
+    height: Mapped[Optional[float]]
+    width: Mapped[Optional[float]]
+    depth: Mapped[Optional[float]]
+    # add here connection to warehouse table
+    storage_location: Mapped[Optional[str]]
+    photo_1_location: Mapped[Optional[str]]
+    photo_2_location: Mapped[Optional[str]]
+    photo_3_location: Mapped[Optional[str]]
+    photo_4_location: Mapped[Optional[str]]
+
+
 class VendorsMasterData(Base):
     __tablename__ = "vendors_md"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -104,56 +157,3 @@ class VendorMDAtribs(Base):
     upload_two_file: Mapped[Optional[str]]
     upload_three_name: Mapped[Optional[str]]
     upload_three_file: Mapped[Optional[str]]
-
-
-class GLAccountsMD(Base):
-    __tablename__ = "gl_accounts_md"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    code: Mapped[int]
-    name: Mapped[str]
-    type: Mapped[str]
-    category: Mapped[Optional[str]]
-    subcategory: Mapped[Optional[str]]
-    description: Mapped[Optional[str]]
-    status: Mapped[str]
-
-    def __repr__(self) -> str:
-        return f"GLAccount id: {self.id!r} code: {self.code!r} name: {self.name!r}"
-
-
-class IvenotriesMD(Base):
-    __tablename__ = "invenotries_md"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    material_code: Mapped[str]
-    name: Mapped[str]
-    description: Mapped[Optional[str]]
-    category: Mapped[Optional[str]]
-    sub_category: Mapped[Optional[str]]
-    unit_of_measure: Mapped[Optional[str]]
-    barcode: Mapped[Optional[str]]
-    is_active: Mapped[Optional[bool]]
-    vendor_code: Mapped[Optional[int]] = mapped_column(ForeignKey("vendors_md.id"))
-    date_created: Mapped[datetime]
-
-    def __repr__(self) -> str:
-        return f"Inventory id: {self.id!r} name: {self.name!r}"
-
-
-class InvenotriesAtributes(Base):
-    __tablename__ = "invenotries_md_attribs"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    i_id: Mapped[int] = mapped_column(ForeignKey("invenotries_md.id"))
-    customs_code: Mapped[Optional[int]]
-    customs_description: Mapped[Optional[str]]
-    main_unit: Mapped[Optional[str]]
-    net_weight: Mapped[Optional[float]]
-    gross_weight: Mapped[Optional[float]]
-    height: Mapped[Optional[float]]
-    width: Mapped[Optional[float]]
-    depth: Mapped[Optional[float]]
-    # add here connection to warehouse table
-    storage_location: Mapped[Optional[str]]
-    photo_1_location: Mapped[Optional[str]]
-    photo_2_location: Mapped[Optional[str]]
-    photo_3_location: Mapped[Optional[str]]
-    photo_4_location: Mapped[Optional[str]]
