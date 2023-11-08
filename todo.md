@@ -1,27 +1,19 @@
-Master data:
+SQL and pydantic models:
     Done:
-        GL - Trial balance - includes attributes of each account - this needs to be developed further with time
-        Counter parties - includes main + atributes with 3 docs attached each and contacts
-        Users - includes users + roles passwords need to be crypted, now strings are stored
+        GL: MD and transactions
+        Vendords/ Clients: MD and transactions
+        Invenotry MD and respective transactions <- fifo, lifo AVG
+        Users <- needs to be improved, also hash pass
+        Sales MD and transactions
     Not done:
-        Cost/profit centers
-        Invenotry
-        Bank accounts
-        Warehouses
+        Cost/profit centers <- either some sort of subcategories or full implementation in in GL transactions, not sure should decide some day
+        Bank accounts <- mapping
+        Warehouses <- not mandatory but would be nice, not turning this into WMS
+    Think:
+        Transaction flow for documents, one posting or multiple document based
+        Azure Document AI implementation confidence levels
+        
+    Later:
+        AI accoutn selection + bank
+        Payroll
 
-Transactions:
-    Not done:
-        Document tables, that add data to GL tables, however the document tables are more detailed
-        GL Tables
-        Invoice issuing:
-
-            Issuing invoices for goods - posting need to incude DR AR / CR REV, COST OF SALE / CR INVENOTRY (FIFO/AVG)
-        Invoice reciving:
-            Invoices for service/goods - directly expensed DR Expense / CR AP - invoice recognition and selection
-            Invoices accumulated in invenotry
-        Bank postings, close invoice tracking in addition posts transcatio to GL table
-        Depreciation and LTA
-        Deferred income/ eexpense
-        Attach other COGS to materials
-Views:
-    Not done

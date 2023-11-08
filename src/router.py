@@ -6,3 +6,4 @@ from sqlmodel import SQLModel, create_engine
 from config import ApiDefault
 
 router = APIRouter()
+

@@ -28,6 +28,7 @@ class Role(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     role_name: Mapped[str]
     description: Mapped[Optional[str]]
+    access_level: Mapped[Optional[int]]
 
     def __repr__(self) -> str:
         return f"Role id: {self.id!r} role_name: {self.role_name!r}"
@@ -48,7 +49,7 @@ class GLAccountsMD(Base):
         return f"GLAccount id: {self.id!r} code: {self.code!r} name: {self.name!r}"
 
 
-class IvenotriesMD(Base):
+class InvenotriesMD(Base):
     __tablename__ = "invenotries_md"
     id: Mapped[int] = mapped_column(primary_key=True)
     material_code: Mapped[str]

@@ -17,7 +17,7 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    """Return user data"""
+    """User creation class pydantic model"""
 
     id: int
     fullname: str
@@ -35,10 +35,6 @@ class RoleBase(BaseModel):
 
 class Role(RoleBase):
     id: int
-
-    class Config:
-        orm_mode = True
-
 
 class GLAccountsMDBase(BaseModel):
     code: int
@@ -62,13 +58,7 @@ class InventoryMD(BaseModel):
     unit_of_measure: str
     barcode: str
     is_active: bool
-    vendor_code: int
-
-    class Config:
-        orm_mode = True
-
-
-class InventoryAtributesMDBase(InventoryMD):
+    vendor_name: str
     customs_code: int
     customs_description: str
     main_unit: str
@@ -82,6 +72,9 @@ class InventoryAtributesMDBase(InventoryMD):
     photo_2_location: str
     photo_3_location: str
     photo_4_location: str
+
+    class Config:
+        orm_mode = True
 
 
 class InvenotryCatAtribs(BaseModel):
@@ -122,9 +115,9 @@ class CounterPartiesMD(BaseModel):
 
 class VendorDetails(CounterPartiesMD):
     vendor_is_due: bool
-    vendor_due_days: int
+    due_days: int
 
 
 class ClientDetails(CounterPartiesMD):
     client_is_due: bool
-    client_due_days: int
+    due_days: int

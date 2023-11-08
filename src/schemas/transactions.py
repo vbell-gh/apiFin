@@ -39,6 +39,7 @@ class DocumentLines(BaseModel):
     unit_price: float
     quantity: float
     amount: float
+
     class Config:
         orm_mode = True
 
@@ -50,6 +51,7 @@ class ARTransactions(CouterpartyTransactions):
 class APTransactions(CouterpartyTransactions):
     extrernal_doc_ref: str
     document_lines: list[DocumentLines]
+
 
 class DocumentTypes(BaseModel):
     abbreviation: str
