@@ -18,7 +18,6 @@ class User(Base):
     fullname: Mapped[str]
     email: Mapped[str]
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
-    created: Mapped[datetime]
 
     def __repr__(self) -> str:
         return f"User id: {self.id!r} username: {self.username!r}"
@@ -55,6 +54,9 @@ class IvenotriesMD(Base):
     material_code: Mapped[str]
     name: Mapped[str]
     description: Mapped[Optional[str]]
+    category_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("inv_cat_atributes.id")
+    )
     category: Mapped[Optional[str]]
     sub_category: Mapped[Optional[str]]
     unit_of_measure: Mapped[Optional[str]]
@@ -85,6 +87,17 @@ class InvenotriesAtributes(Base):
     photo_2_location: Mapped[Optional[str]]
     photo_3_location: Mapped[Optional[str]]
     photo_4_location: Mapped[Optional[str]]
+
+
+class InvenotryCategoryAtributes(Base):
+    __tablename__ = "inv_cat_atributes"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    category_name: Mapped[str]
+    category_description: Mapped[Optional[str]]
+    revenue_account: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("gl_accounts_md.id")
+    )
+    cogs_account: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts_md.id"))
 
 
 class VendorsMasterData(Base):
