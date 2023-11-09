@@ -1,8 +1,8 @@
 
-**Backend for accounting software**
+# Backend for accounting software
 
 The backend is based on FastApi and SQL DB.
-Currently only SQLite is implemented, who knows some day maybe something else.
+Currently only SQLite is implemented, should easily work with other some day.
 
 The main.py registers the different routers.
 The SQL models are in src/models, split between three categories: master data, transactions and settings.

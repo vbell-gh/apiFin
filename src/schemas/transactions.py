@@ -2,6 +2,13 @@ from pydantic import BaseModel
 from datetime import date
 
 
+class DocumentsAssociation(BaseModel):
+    document_type: str
+    document_id: int
+
+    class Config:
+        orm_mode = True
+
 class GLTransactions(BaseModel):
     type_of_operation: str
     account_no: int

@@ -101,8 +101,7 @@ class InvenotryCategoryAtributes(Base):
     cogs_account: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts_md.id"))
 
 
-class VendorsMasterData(Base):
-    __tablename__ = "vendors_md"
+class CounterPartyMixin:
     id: Mapped[int] = mapped_column(primary_key=True)
     vatid: Mapped[str]
     country: Mapped[str]
@@ -111,63 +110,48 @@ class VendorsMasterData(Base):
     company_name_cyrilic: Mapped[Optional[str]]
     company_name_latin: Mapped[str]
     address: Mapped[str]
+
+
+class CounterPartyMDAtribsMixin:
+    id: Mapped[int] = mapped_column(primary_key=True)
+    is_active: Mapped[Optional[bool]]
+    main_contact_name: Mapped[Optional[str]]
+    main_contact_email: Mapped[Optional[str]]
+    main_contact_phone: Mapped[Optional[str]]
+    fin_contact_name: Mapped[Optional[str]]
+    fin_contact_email: Mapped[Optional[str]]
+    fin_contact_phone: Mapped[Optional[str]]
+    upload_one_name: Mapped[Optional[str]]
+    upload_one_file: Mapped[Optional[str]]  # file path
+    upload_two_name: Mapped[Optional[str]]
+    upload_two_file: Mapped[Optional[str]]
+    upload_three_name: Mapped[Optional[str]]
+    upload_three_file: Mapped[Optional[str]]
+
+
+class VendorsMasterData(Base, CounterPartyMixin):
+    __tablename__ = "vendors_md"
 
     def __repr__(self) -> str:
         return f"Vendor id: {self.id!r} company_name_latin: {self.company_name_latin!r}"
 
 
-class ClientsMasterData(Base):
+class ClientsMasterData(Base, CounterPartyMixin):
     __tablename__ = "clients_md"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    vatid: Mapped[str]
-    country: Mapped[str]
-    company_id: Mapped[str]
-    bank_account: Mapped[Optional[str]]
-    company_name_cyrilic: Mapped[Optional[str]]
-    company_name_latin: Mapped[str]
-    address: Mapped[str]
 
     def __repr__(self) -> str:
         return f"Client id: {self.id!r} company_name_latin: {self.company_name_latin!r}"
 
 
-class ClientsMDAtribs(Base):
+class ClientsMDAtribs(Base, CounterPartyMDAtribsMixin):
     __tablename__ = "clients_md_attribs"
-    id: Mapped[int] = mapped_column(primary_key=True)
     c_id: Mapped[int] = mapped_column(ForeignKey("clients_md.id"))
     client_is_due: Mapped[bool]
     client_due_days: Mapped[Optional[int]]
-    is_active: Mapped[Optional[bool]]
-    main_contact_name: Mapped[Optional[str]]
-    main_contact_email: Mapped[Optional[str]]
-    main_contact_phone: Mapped[Optional[str]]
-    fin_contact_name: Mapped[Optional[str]]
-    fin_contact_email: Mapped[Optional[str]]
-    fin_contact_phone: Mapped[Optional[str]]
-    upload_one_name: Mapped[Optional[str]]
-    upload_one_file: Mapped[Optional[str]]  # file path
-    upload_two_name: Mapped[Optional[str]]
-    upload_two_file: Mapped[Optional[str]]
-    upload_three_name: Mapped[Optional[str]]
-    upload_three_file: Mapped[Optional[str]]
 
 
-class VendorMDAtribs(Base):
+class VendorMDAtribs(Base, CounterPartyMDAtribsMixin):
     __tablename__ = "vendor_md_attribs"
-    id: Mapped[int] = mapped_column(primary_key=True)
     c_id: Mapped[int] = mapped_column(ForeignKey("vendors_md.id"))
     vendor_is_due: Mapped[bool]
     vendor_due_days: Mapped[Optional[int]]
-    is_active: Mapped[Optional[bool]]
-    main_contact_name: Mapped[Optional[str]]
-    main_contact_email: Mapped[Optional[str]]
-    main_contact_phone: Mapped[Optional[str]]
-    fin_contact_name: Mapped[Optional[str]]
-    fin_contact_email: Mapped[Optional[str]]
-    fin_contact_phone: Mapped[Optional[str]]
-    upload_one_name: Mapped[Optional[str]]
-    upload_one_file: Mapped[Optional[str]]  # file path
-    upload_two_name: Mapped[Optional[str]]
-    upload_two_file: Mapped[Optional[str]]
-    upload_three_name: Mapped[Optional[str]]
-    upload_three_file: Mapped[Optional[str]]
