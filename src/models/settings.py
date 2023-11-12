@@ -13,8 +13,18 @@ class Base(DeclarativeBase):
 class DocumentTypes(Base):
     __tablename__ = "document_types"
     id: Mapped[int] = mapped_column(primary_key=True)
+    doc_abbreviation: Mapped[str]
     name: Mapped[str]
     desctiption: Mapped[Optional[str]]
+    counter: Mapped[Optional[int]]  # this is the counter for AR types of documents
+
+
+class TaxCodes(Base):
+    __tablename__ = "tax_codes"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tax_code_abriviation: Mapped[str]
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
 
 
 class Logs(Base):  # idea for now python loggin module is enough
@@ -25,7 +35,7 @@ class Logs(Base):  # idea for now python loggin module is enough
     operation_id: Mapped[int] = mapped_column(ForeignKey("gl_transactions.id"))
 
 
-class AppSettings(Base): # for now can be a simple json file
+class AppSettings(Base):  # for now can be a simple json file
     __tablename__ = "app_settings"
     id: Mapped[int] = mapped_column(primary_key=True)
     abbreviation: Mapped[str]
@@ -33,5 +43,5 @@ class AppSettings(Base): # for now can be a simple json file
     value: Mapped[str]
     description: Mapped[Optional[str]]
 
-# Add currency table
 
+# Add currency table

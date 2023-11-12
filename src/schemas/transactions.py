@@ -9,6 +9,7 @@ class DocumentsAssociation(BaseModel):
     class Config:
         orm_mode = True
 
+
 class GLTransactions(BaseModel):
     type_of_operation: str
     account_no: int
@@ -42,7 +43,6 @@ class CouterpartyTransactions(BaseModel):
 class DocumentLines(BaseModel):
     id: int
     service_or_product: str
-    type_of_operation: str
     unit_price: float
     quantity: float
     amount: float
@@ -52,6 +52,7 @@ class DocumentLines(BaseModel):
 
 
 class ARTransactions(CouterpartyTransactions):
+    so_id: int
     document_lines: list[DocumentLines]
 
 

@@ -23,15 +23,6 @@ class DocumentsAssociation(Base):
         str
     ]  # This is the name of the table that originated the transaction
     doc_sub_type: Mapped[Optional[str]]
-    ar_document_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("ar_transactions.id")
-    )
-    ap_document_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("ap_transactions.id")
-    )
-    bank_document_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("bank_transactions.id")
-    )
     is_accounting_posing: Mapped[bool]
 
     # Relationships
@@ -61,9 +52,6 @@ class GLTransactions(Base):
 
     __tablename__ = "gl_transactions"
     id: Mapped[int] = mapped_column(primary_key=True)
-    document_association: Mapped[int] = mapped_column(
-        ForeignKey("documents_association.id")
-    )
     type_of_operation: Mapped[str]
     account_no: Mapped[int] = mapped_column(ForeignKey("gl_accounts.account_code"))
     amount: Mapped[float]
@@ -75,7 +63,7 @@ class GLTransactions(Base):
     )
 
     def __repr__(self) -> str:
-        return f"Transaction id: {self.id!r} document_association: {self.document_association!r}"
+        return f"Transaction id: {self.id!r} document_association: {self.type_of_operation!r}"
 
 
 class ARTransactions(Base):
@@ -90,11 +78,13 @@ class ARTransactions(Base):
     so_id: Mapped[int] = mapped_column(
         ForeignKey("sales_orders.id"),
     )
+    documents_association_id: Mapped[int] = mapped_column(
+        ForeignKey("documents_association.id"))
     internal_doc_ref: Mapped[int]  # internal document refference
     document_type: Mapped[str]
     date_posted: Mapped[datetime]
     document_date: Mapped[datetime]
-    days_due: Mapped[int]
+    days_due: Mapped[Optional[int]]
     c_id: Mapped[int] = mapped_column(ForeignKey("customers.id"))
     tax_code: Mapped[str]
     date_closed: Mapped[Optional[datetime]]
@@ -192,7 +182,6 @@ class ServicesSalesLines(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     document_refference: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
     service_id: Mapped[int] = mapped_column(ForeignKey("services.id"))
-    type_of_operation: Mapped[str]
     unit_price: Mapped[float]
     quantity: Mapped[float]
     amount: Mapped[float]
