@@ -11,10 +11,12 @@ class DocumentsAssociation(BaseModel):
 
 
 class GLTransactions(BaseModel):
-    type_of_operation: str
+    type_of_operation: str # DR or CR
     account_no: int
     amount: float
-    currency: str
+    line_text: str
+    line_description: str
+    created: date
 
     class Config:
         orm_mode = True
@@ -42,7 +44,9 @@ class CouterpartyTransactions(BaseModel):
 
 class DocumentLines(BaseModel):
     id: int
-    service_or_product: str
+    line_item_id: int
+    account_id: int
+    custom_line_name: str
     unit_price: float
     quantity: float
     amount: float

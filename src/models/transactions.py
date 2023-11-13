@@ -52,10 +52,12 @@ class GLTransactions(Base):
 
     __tablename__ = "gl_transactions"
     id: Mapped[int] = mapped_column(primary_key=True)
-    type_of_operation: Mapped[str]
+    doc_id: Mapped[int] = mapped_column(ForeignKey("documents_association.id"))
+    type_of_operation: Mapped[str] # DR or CR
     account_no: Mapped[int] = mapped_column(ForeignKey("gl_accounts.account_code"))
     amount: Mapped[float]
-    currency: Mapped[str]
+    line_text: Mapped[Optional[str]]
+    line_description: Mapped[Optional[str]]
     created: Mapped[datetime]
 
     documents_association: Mapped["DocumentsAssociation"] = relationship(
@@ -79,14 +81,15 @@ class ARTransactions(Base):
         ForeignKey("sales_orders.id"),
     )
     documents_association_id: Mapped[int] = mapped_column(
-        ForeignKey("documents_association.id"))
-    internal_doc_ref: Mapped[int]  # internal document refference
-    document_type: Mapped[str]
+        ForeignKey("documents_association.id")
+    )
+    document_type: Mapped[str]  # mapped to settings
+    internal_doc_ref: Mapped[int]  # generated
     date_posted: Mapped[datetime]
     document_date: Mapped[datetime]
     days_due: Mapped[Optional[int]]
     c_id: Mapped[int] = mapped_column(ForeignKey("customers.id"))
-    tax_code: Mapped[str]
+    tax_code: Mapped[str]  # mapped to settings
     date_closed: Mapped[Optional[datetime]]
     net_amount: Mapped[float]
     tax_amount: Mapped[float]
@@ -160,19 +163,19 @@ class GoodsSalesLines(Base):
 
     __tablename__ = "goods_sales_lines"
     id: Mapped[int] = mapped_column(primary_key=True)
-    document_refference: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
-    type_of_operation: Mapped[str]
+    document_id: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
+    material_id: Mapped[Optional[int]] = mapped_column(ForeignKey("products.id"))
+    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts.id"))
+    custom_line_name: Mapped[Optional[str]]
     unit_price: Mapped[float]
     quantity: Mapped[float]
     amount: Mapped[float]
-    created: Mapped[datetime]
     ar_transactions: Mapped["ARTransactions"] = relationship(
         back_populates="goods_sales_lines"
     )
 
     def __repr__(self) -> str:
-        return f"Transaction id: {self.id!r} document_refference: {self.document_refference!r}"
+        return f"Transaction id: {self.id!r} document_refference: {self.amount!r}"
 
 
 class ServicesSalesLines(Base):
@@ -180,18 +183,19 @@ class ServicesSalesLines(Base):
 
     __tablename__ = "services_sales_lines"
     id: Mapped[int] = mapped_column(primary_key=True)
-    document_refference: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
-    service_id: Mapped[int] = mapped_column(ForeignKey("services.id"))
+    document_id: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
+    service_id: Mapped[Optional[int]] = mapped_column(ForeignKey("services.id"))
+    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts.id"))
+    custom_line_name: Mapped[Optional[str]]
     unit_price: Mapped[float]
     quantity: Mapped[float]
     amount: Mapped[float]
-    created: Mapped[datetime]
     ar_transactions: Mapped["ARTransactions"] = relationship(
         back_populates="services_sales_lines"
     )
 
     def __repr__(self) -> str:
-        return f"Transaction id: {self.id!r} document_refference: {self.document_refference!r}"
+        return f"Transaction id: {self.id!r} document_refference: {self.amount!r}"
 
 
 class InventoryMovement(Base):
