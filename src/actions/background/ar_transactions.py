@@ -7,6 +7,10 @@ from src.models import transactions as models_tr
 from src.schemas import transactions as schemas_tr
 from src.models import settings as app_settings
 
+from config import ApiDefault
+
+api_settings = ApiDefault()
+
 
 class ARTransactionsPosting:
     """This class is used to post AR Transactions the actions posting in all tables based on the documet type are defined here."""
@@ -21,9 +25,9 @@ class ARTransactionsPosting:
         )
         self.gl_document = []  # here are stored the GL entries prior to posting
 
-        self.ar_account = 9999  # this is the receivables account should be changed
-        self.tax_account = 9998  # this is the tax account should be changed
-
+        self.ar_account = api_settings.ar_account
+        self.tax_account = api_settings.vat_account
+        
     def get_next_doc_no(self) -> int:
         """get_next_doc_no Returns the next document number for a given document type
 
@@ -105,6 +109,7 @@ class ARTransactionsPosting:
             self.db.commit()
 
     def generate_gl_entries(self) -> None:
+        # This needs to be implemeneted in the process_line_ites method, so that the loop does not repeat
         """generate_gl_entries this method generates the GL entries for the document,
         based on which are posted with the DocumentASsociation model
 
