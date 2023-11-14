@@ -1,17 +1,15 @@
-from contextlib import asynccontextmanager
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter
+from sqlalchemy import create_engine
 
-
+from src.actions.create import master_data as create_md
 from src.schemas import transactions as schemas_tr
+from config import ApiDefault
 
-@asynccontextmanager
-async def create_trasnactions_tables(app: APIRouter):
-    
+settings = ApiDefault()
+DB_LOCATION = settings.db_location
+
+engine = create_engine(DB_LOCATION, echo=True)
+
+tr_router = APIRouter(prefix="/transaction")
 
 
-router = APIRouter(prefix="/transaction")
-
-
-@router.post("/AR")
-def post_ar_transaction(document: schemas_tr.ARTransactions):
-    pass

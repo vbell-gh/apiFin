@@ -1,30 +1,25 @@
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-
-
-class Base(DeclarativeBase):
-    """Base declarative class for all models."""
-
-    __abstract__ = True
+from sqlalchemy.orm import mapped_column, Mapped
+from src.models.base import Base
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "md_users"
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str]
     password: Mapped[str]
     fullname: Mapped[str]
     email: Mapped[str]
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
+    role_id: Mapped[int] = mapped_column(ForeignKey("md_roles.id"))
 
     def __repr__(self) -> str:
         return f"User id: {self.id!r} username: {self.username!r}"
 
 
 class Role(Base):
-    __tablename__ = "roles"
+    __tablename__ = "md_roles"
     id: Mapped[int] = mapped_column(primary_key=True)
     role_name: Mapped[str]
     description: Mapped[Optional[str]]
@@ -35,7 +30,7 @@ class Role(Base):
 
 
 class GLAccountsMD(Base):
-    __tablename__ = "gl_accounts_md"
+    __tablename__ = "md_gl_accounts"
     id: Mapped[int] = mapped_column(primary_key=True)
     code: Mapped[int]
     name: Mapped[str]
@@ -50,20 +45,20 @@ class GLAccountsMD(Base):
 
 
 class InvenotriesMD(Base):
-    __tablename__ = "invenotries_md"
+    __tablename__ = "md_invenotries"
     id: Mapped[int] = mapped_column(primary_key=True)
     material_code: Mapped[str]
     name: Mapped[str]
     description: Mapped[Optional[str]]
     category_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("inv_cat_atributes.id")
+        ForeignKey("md_inv_cat_atribs.id")
     )
     category: Mapped[Optional[str]]
     sub_category: Mapped[Optional[str]]
     unit_of_measure: Mapped[Optional[str]]
     barcode: Mapped[Optional[str]]
     is_active: Mapped[Optional[bool]]
-    vendor_code: Mapped[Optional[int]] = mapped_column(ForeignKey("vendors_md.id"))
+    vendor_code: Mapped[Optional[int]] = mapped_column(ForeignKey("md_vendors.id"))
     date_created: Mapped[datetime]
 
     def __repr__(self) -> str:
@@ -71,9 +66,9 @@ class InvenotriesMD(Base):
 
 
 class InvenotriesAtributes(Base):
-    __tablename__ = "invenotries_md_attribs"
+    __tablename__ = "md_invenotries_attribs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    i_id: Mapped[int] = mapped_column(ForeignKey("invenotries_md.id"))
+    i_id: Mapped[int] = mapped_column(ForeignKey("md_invenotries.id"))
     customs_code: Mapped[Optional[int]]
     customs_description: Mapped[Optional[str]]
     main_unit: Mapped[Optional[str]]
@@ -91,14 +86,14 @@ class InvenotriesAtributes(Base):
 
 
 class InvenotryCategoryAtributes(Base):
-    __tablename__ = "inv_cat_atributes"
+    __tablename__ = "md_inv_cat_atribs"
     id: Mapped[int] = mapped_column(primary_key=True)
     category_name: Mapped[str]
     category_description: Mapped[Optional[str]]
     revenue_account: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("gl_accounts_md.id")
+        ForeignKey("md_gl_accounts.id")
     )
-    cogs_account: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts_md.id"))
+    cogs_account: Mapped[Optional[int]] = mapped_column(ForeignKey("md_gl_accounts.id"))
 
 
 class CounterPartyMixin:
@@ -130,28 +125,38 @@ class CounterPartyMDAtribsMixin:
 
 
 class VendorsMasterData(Base, CounterPartyMixin):
-    __tablename__ = "vendors_md"
+    __tablename__ = "md_vendors"
 
     def __repr__(self) -> str:
         return f"Vendor id: {self.id!r} company_name_latin: {self.company_name_latin!r}"
 
 
 class ClientsMasterData(Base, CounterPartyMixin):
-    __tablename__ = "clients_md"
+    __tablename__ = "md_clients"
 
     def __repr__(self) -> str:
         return f"Client id: {self.id!r} company_name_latin: {self.company_name_latin!r}"
 
 
 class ClientsMDAtribs(Base, CounterPartyMDAtribsMixin):
-    __tablename__ = "clients_md_attribs"
-    c_id: Mapped[int] = mapped_column(ForeignKey("clients_md.id"))
+    __tablename__ = "md_clients_attribs"
+    c_id: Mapped[int] = mapped_column(ForeignKey("md_clients.id"))
     client_is_due: Mapped[bool]
     client_due_days: Mapped[Optional[int]]
 
 
 class VendorMDAtribs(Base, CounterPartyMDAtribsMixin):
-    __tablename__ = "vendor_md_attribs"
-    c_id: Mapped[int] = mapped_column(ForeignKey("vendors_md.id"))
+    __tablename__ = "md_vendor_attribs"
+    c_id: Mapped[int] = mapped_column(ForeignKey("md_vendors.id"))
     vendor_is_due: Mapped[bool]
     vendor_due_days: Mapped[Optional[int]]
+
+
+class ServicesMD(Base):
+    __tablename__ = "md_services"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    description: Mapped[Optional[str]]
+    category: Mapped[Optional[str]]
+    sub_category: Mapped[Optional[str]]
+    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("md_gl_accounts.id"))

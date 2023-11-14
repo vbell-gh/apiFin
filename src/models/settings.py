@@ -2,13 +2,7 @@ from datetime import datetime
 from typing import Optional
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-
-
-class Base(DeclarativeBase):
-    """Base declarative class for all models."""
-
-    __abstract__ = True
-
+from src.models.base import Base
 
 class DocumentTypes(Base):
     """DocumentTypes This class is used to define the document types that are used in the system.
@@ -21,7 +15,7 @@ class DocumentTypes(Base):
     - NVD (Non vat document) - used for non vat documents. These are recoded in the AR transactions table in db, however have no VAT effect (e.g. guaranes, penalties, as applicable)
     """
 
-    __tablename__ = "document_types"
+    __tablename__ = "def_document_types"
     id: Mapped[int] = mapped_column(primary_key=True)
     doc_abbreviation: Mapped[str]
     name: Mapped[str]
@@ -31,7 +25,7 @@ class DocumentTypes(Base):
 
 
 class TaxCodes(Base):
-    __tablename__ = "tax_codes"
+    __tablename__ = "def_tax_codes"
     id: Mapped[int] = mapped_column(primary_key=True)
     tax_code_abriviation: Mapped[str]
     name: Mapped[str]
@@ -39,9 +33,9 @@ class TaxCodes(Base):
 
 
 class Logs(Base):  # idea for now python loggin module is enough
-    __tablename__ = "logs"
+    __tablename__ = "def_logs"
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("md_users.id"))
     created: Mapped[datetime]
     operation_id: Mapped[int] = mapped_column(ForeignKey("gl_transactions.id"))
 

@@ -36,6 +36,7 @@ class RoleBase(BaseModel):
 class Role(RoleBase):
     id: int
 
+
 class GLAccountsMDBase(BaseModel):
     code: int
     name: str
@@ -85,6 +86,15 @@ class InvenotryCatAtribs(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ServicesMD(BaseModel):
+    id: int
+    name: str
+    description: str
+    category: str
+    sub_category: str
+    account: str
 
 
 class CounterPartiesMD(BaseModel):

@@ -73,7 +73,7 @@ def create_client(db: Session, client: schemas_md.ClientDetails):
             fin_contact_email=client.fin_contact_email,
             fin_contact_phone=client.fin_contact_phone,
             upload_one_name=client.upload_one_name,
-            upload_one_file=client.upload_one_file,  # file path
+            upload_one_file=client.upload_one_file,
             upload_two_name=client.upload_two_name,
             upload_two_file=client.upload_two_file,
             upload_three_name=client.upload_three_name,
@@ -155,6 +155,23 @@ def create_material(db: Session, material=schemas_md.InventoryMD):
         )
     except SQLAlchemyError as e:
         logging.error("Error creating Material: %s", e)
+        raise e
+
+
+def create_service(db: Session, service=schemas_md.ServicesMD):
+    try:
+        db_service = models_md.ServicesMD(
+            name=service.name,
+            description=service.description,
+            category=service.category,
+            sub_category=service.sub_category,
+            account=service.account,
+        )
+        db.add(db_service)
+        db.commit()
+        logging.info("Service created successfully, name: %s", db_service.name)
+    except SQLAlchemyError as e:
+        logging.error("Error creating Service: %s", e)
         raise e
 
 

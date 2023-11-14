@@ -1,13 +1,8 @@
 from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
-
-class Base(DeclarativeBase):
-    """Base declarative class for all models."""
-
-    __abstract__ = True
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.models.base import Base
 
 
 class DocumentsAssociation(Base):
@@ -53,8 +48,8 @@ class GLTransactions(Base):
     __tablename__ = "gl_transactions"
     id: Mapped[int] = mapped_column(primary_key=True)
     doc_id: Mapped[int] = mapped_column(ForeignKey("documents_association.id"))
-    type_of_operation: Mapped[str] # DR or CR
-    account_no: Mapped[int] = mapped_column(ForeignKey("gl_accounts.account_code"))
+    account_no: Mapped[int] = mapped_column(ForeignKey("md_gl_accounts.id"))
+    type_of_operation: Mapped[str]  # DR or CR
     amount: Mapped[float]
     line_text: Mapped[Optional[str]]
     line_description: Mapped[Optional[str]]
@@ -77,9 +72,7 @@ class ARTransactions(Base):
     __tablename__ = "ar_transactions"
     # polimorfic refence to gl_transactions.document_refference
     id: Mapped[int] = mapped_column(primary_key=True)
-    so_id: Mapped[int] = mapped_column(
-        ForeignKey("sales_orders.id"),
-    )
+    so_id: Mapped[Optional[int]]  # sales order id if applicable
     documents_association_id: Mapped[int] = mapped_column(
         ForeignKey("documents_association.id")
     )
@@ -88,7 +81,7 @@ class ARTransactions(Base):
     date_posted: Mapped[datetime]
     document_date: Mapped[datetime]
     days_due: Mapped[Optional[int]]
-    c_id: Mapped[int] = mapped_column(ForeignKey("customers.id"))
+    c_id: Mapped[int] = mapped_column(ForeignKey("md_clients.id"))
     tax_code: Mapped[str]  # mapped to settings
     date_closed: Mapped[Optional[datetime]]
     net_amount: Mapped[float]
@@ -125,7 +118,7 @@ class APTransactions(Base):
     date_posted: Mapped[datetime]
     document_date: Mapped[datetime]
     days_due: Mapped[int]
-    c_id: Mapped[int] = mapped_column(ForeignKey("vendors.id"))
+    c_id: Mapped[int] = mapped_column(ForeignKey("md_vendors.id"))
     tax_code: Mapped[str]
     date_closed: Mapped[Optional[datetime]]
     net_amount: Mapped[float]
@@ -152,7 +145,7 @@ class BankTransactions(Base):
     amount: Mapped[float]
     currency: Mapped[str]
     movement_type: Mapped[str]
-    account_id: Mapped[int] = mapped_column(ForeignKey("gl_accounts_md.code"))
+    account_id: Mapped[int] = mapped_column(ForeignKey("md_gl_accounts.id"))
 
     def __repr__(self) -> str:
         return f"Transaction id: {self.id!r} ref_no: {self.ref_no!r}"
@@ -164,8 +157,8 @@ class GoodsSalesLines(Base):
     __tablename__ = "goods_sales_lines"
     id: Mapped[int] = mapped_column(primary_key=True)
     document_id: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
-    material_id: Mapped[Optional[int]] = mapped_column(ForeignKey("products.id"))
-    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts.id"))
+    material_id: Mapped[Optional[int]] = mapped_column(ForeignKey("md_invenotries.id"))
+    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("md_gl_accounts.id"))
     custom_line_name: Mapped[Optional[str]]
     unit_price: Mapped[float]
     quantity: Mapped[float]
@@ -184,8 +177,8 @@ class ServicesSalesLines(Base):
     __tablename__ = "services_sales_lines"
     id: Mapped[int] = mapped_column(primary_key=True)
     document_id: Mapped[int] = mapped_column(ForeignKey("ar_transactions.id"))
-    service_id: Mapped[Optional[int]] = mapped_column(ForeignKey("services.id"))
-    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("gl_accounts.id"))
+    service_id: Mapped[Optional[int]] = mapped_column(ForeignKey("md_services.id"))
+    account_id: Mapped[Optional[int]] = mapped_column(ForeignKey("md_gl_accounts.id"))
     custom_line_name: Mapped[Optional[str]]
     unit_price: Mapped[float]
     quantity: Mapped[float]
@@ -205,7 +198,7 @@ class InventoryMovement(Base):
 
     __tablename__ = "inventory_movements"
     id: Mapped[int] = mapped_column(primary_key=True)
-    material_id: Mapped[int] = mapped_column(ForeignKey("invenotries_md.id"))
+    material_id: Mapped[int] = mapped_column(ForeignKey("md_invenotries.id"))
     document_refference_in: Mapped[Optional[int]] = mapped_column(
         ForeignKey("ap_transactions.id")
     )
