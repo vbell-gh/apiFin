@@ -96,7 +96,7 @@ def create_gl_account(db: Session, gl_account: schemas_md.GLAccountsMDBase):
             category=gl_account.category,
             subcategory=gl_account.subcategory,
             description=gl_account.description,
-            is_active=True,
+            status=gl_account.status,
         )
         db.add(db_gl_account)
         db.commit()
@@ -133,7 +133,7 @@ def create_material(db: Session, material=schemas_md.InventoryMD):
         db.refresh(db_material)
         db_material_attribs = models_md.InvenotriesAtributes(
             i_id=db_material.id,
-            custom_code=material.customs_code,
+            customs_code=material.customs_code,
             customs_description=material.customs_description,
             main_unit=material.main_unit,
             net_weight=material.net_weight,
@@ -165,7 +165,7 @@ def create_service(db: Session, service=schemas_md.ServicesMD):
             description=service.description,
             category=service.category,
             sub_category=service.sub_category,
-            account=service.account,
+            account_id=service.account,
         )
         db.add(db_service)
         db.commit()

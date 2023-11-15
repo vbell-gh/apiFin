@@ -16,6 +16,8 @@ engine = create_engine(DB_LOCATION, echo=True)
 
 
 def create_db_if_not_exists():
+    """create_db_if_not_exists Creates the database tables defined in the models
+    """
     Base_md.metadata.create_all(engine)
     Base_tr.metadata.create_all(engine)
     Base_set.metadata.create_all(engine)

@@ -33,6 +33,7 @@ class RoleBase(BaseModel):
     description: str
     access_level: int
 
+
 class Role(RoleBase):
     id: int
 
@@ -94,7 +95,7 @@ class ServicesMD(BaseModel):
     description: str
     category: str
     sub_category: str
-    account: str
+    account: int
 
 
 class CounterPartiesMD(BaseModel):
