@@ -192,11 +192,12 @@ def create_user(db: Session, user: schemas_md.UserCreate):
         raise e
 
 
-def create_role(db: Session, role: schemas_md.Role):
+def create_role(db: Session, role: schemas_md.RoleBase):
     try:
         db_role = models_md.Role(
             role_name=role.role_name,
             description=role.description,
+            access_level=role.access_level
         )
         db.add(db_role)
         db.commit()

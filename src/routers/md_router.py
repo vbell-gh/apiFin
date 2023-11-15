@@ -44,5 +44,5 @@ def create_user(user: schemas_md.UserCreate):
 
 
 @md_router.post("/create_role")
-def create_role(role: schemas_md.Role):
+def create_role(role: schemas_md.RoleBase):
     create_md.create_role(engine, role)

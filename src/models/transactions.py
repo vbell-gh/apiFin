@@ -113,7 +113,10 @@ class APTransactions(Base):
 
     __tablename__ = "ap_transactions"
     id: Mapped[int] = mapped_column(primary_key=True)
-    document_type: Mapped[str]
+    documents_association_id: Mapped[int] = mapped_column(
+        ForeignKey("documents_association.id")
+    )
+    document_type: Mapped[str] # mapped to settings
     external_doc_ref: Mapped[int]  # external document refference
     date_posted: Mapped[datetime]
     document_date: Mapped[datetime]
@@ -127,7 +130,7 @@ class APTransactions(Base):
     currency: Mapped[str]
 
     documents_association: Mapped["DocumentsAssociation"] = relationship(
-        back_populates="ar_transactions"
+        back_populates="ap_transactions"
     )
 
     def __repr__(self) -> str:
@@ -141,11 +144,18 @@ class BankTransactions(Base):
 
     __tablename__ = "bank_transactions"
     id: Mapped[int] = mapped_column(primary_key=True)
+    documents_association_id: Mapped[int] = mapped_column(
+        ForeignKey("documents_association.id")
+    )
     ref_no: Mapped[int]
     amount: Mapped[float]
     currency: Mapped[str]
     movement_type: Mapped[str]
     account_id: Mapped[int] = mapped_column(ForeignKey("md_gl_accounts.id"))
+    
+    documents_association: Mapped["DocumentsAssociation"] = relationship(
+        back_populates="bank_transactions"
+    )
 
     def __repr__(self) -> str:
         return f"Transaction id: {self.id!r} ref_no: {self.ref_no!r}"

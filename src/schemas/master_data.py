@@ -31,7 +31,7 @@ class User(UserBase):
 class RoleBase(BaseModel):
     role_name: str
     description: str
-
+    access_level: int
 
 class Role(RoleBase):
     id: int
